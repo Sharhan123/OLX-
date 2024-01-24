@@ -47,6 +47,7 @@ export default function Signup() {
           navigate('/login')
         })
       })
+      navigate('/login')
     })
     
   }

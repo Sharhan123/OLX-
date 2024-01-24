@@ -21,12 +21,12 @@ function Banner() {
             <span>For Rent: House & Apart...</span>
           </div>
         </div>
-        {/* <div className="banner">
+        <div className="banner">
           <img
             src="../../../Images/banner copy.png"
             alt=""
           />
-        </div> */}
+        </div>
       </div>
       
     </div>

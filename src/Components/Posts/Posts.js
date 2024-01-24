@@ -8,23 +8,39 @@ import { PostContext } from '../../Store/postContext';
 import { useNavigate } from 'react-router-dom';
 
 function Posts() {
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
+  const { setPostDetail } = useContext(PostContext);
+  const navigate = useNavigate();
 
-  const [products,setProducts] = useState([])
-  const {setPostDetail} = useContext(PostContext)
-  const navigate = useNavigate()
+  useEffect(() => {
+    const getDocuments = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(firestore, 'sellingProducts'));
+        const dataArray = [];
 
-  useEffect(()=>{
-    const productCollection = collection(firestore,"products")
-    getDocs(productCollection).then((snapshot)=>{
-      const posts = snapshot.docs.map((product)=>{
-        return{
-          ...product.data(),
-          id:product.id
-        }
-      })
-      setProducts(posts)
-    })
-  },[])
+        querySnapshot.forEach((doc) => {
+          dataArray.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        setProducts(dataArray);
+        setLoading(false);
+        console.log(dataArray);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getDocuments();
+  }, []);
+
+  
+  if (loading) {
+    return <p>Loading...</p>; // Display loading state
+  }
 
   return (
     <div className="postParentDiv">
@@ -46,7 +62,7 @@ function Posts() {
                 <Heart></Heart>
               </div>
               <div className="image">
-                <img src={product.url} alt="" />
+                <img src={product.image} alt="" />
               </div>
               <div className="content">
                 <p className="rate">&#x20B9; {product.price}</p>
@@ -54,7 +70,7 @@ function Posts() {
                 <p className="name"> {product.name}</p>
               </div>
               <div className="date">
-                <span>{product.date}</span>
+              <span>{new Date(product.date).toLocaleString()}</span>
               </div>
             </div>
             )

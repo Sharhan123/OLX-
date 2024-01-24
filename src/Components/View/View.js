@@ -28,7 +28,7 @@ function View() {
     <div className="viewParentDiv">
       <div className="imageShowDiv">
         <img
-          src={postDatail.url}
+          src={postDatail.image}
           alt={postDatail.name}
         />
       </div>
